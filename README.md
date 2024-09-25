@@ -32,3 +32,8 @@ type 包含 ：
 	string
 	
 
+
+potato_c.exe 使用：
+
+	-i  or  --input_file  <input_file>
+	-o  or  --output_path  <output_path>
