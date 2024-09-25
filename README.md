@@ -7,8 +7,8 @@ xml 结构要求
 括号中为可用的属性
 
 ```
-package(name) - class(name) - enum(name) - element(name, id)
-							- message(name, type)
+package(name)	- class(name)	- enum(name)	- element(name, id)
+				- message(name, type)
 ```
 
 enum 表示类中的枚举
