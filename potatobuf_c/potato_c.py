@@ -295,7 +295,7 @@ def _generate_potatobuf_cpp( file_h, file_cc , class_name : str) -> int:
 
     for t_enum in _list_enum:
         file_h.write("\n\t//" + t_enum._name + "\n")
-        file_h.write("\tenum " + t_enum._name + " : int {\n")
+        file_h.write("\tenum class " + t_enum._name + " : int {\n")
         # print(len(t_enum._element))
         for t_element in t_enum._element :
             id = t_element._id
