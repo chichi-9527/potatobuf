@@ -349,33 +349,33 @@ def _generate_potatobuf_cpp( file_h, file_cc , class_name : str) -> int:
         file_h.write("\t//" + msg_string._name +"\n\t//" + str(msg_string._description) + "\n")
         file_h.write("\tADD_MSG_STRING(" + msg_string._name +")\n\n")
 
-    file_h.write("\tprivate:\n")
+    file_h.write("private:\n")
     for msg_int8 in _list_message_int8:
-        file_h.write("\t\tP_INT8 " + msg_int8._name +";\n")
+        file_h.write("\tP_INT8 " + msg_int8._name +";\n")
     for msg_int16 in _list_message_int16:
-        file_h.write("\t\tP_INT16 " + msg_int16._name +";\n")
+        file_h.write("\tP_INT16 " + msg_int16._name +";\n")
     for msg_int32 in _list_message_int32:
-        file_h.write("\t\tP_INT32 " + msg_int32._name +";\n")
+        file_h.write("\tP_INT32 " + msg_int32._name +";\n")
     for msg_int64 in _list_message_int64:
-        file_h.write("\t\tP_INT64 " + msg_int64._name +";\n")
+        file_h.write("\tP_INT64 " + msg_int64._name +";\n")
     for msg_uint8 in _list_message_uint8:
-        file_h.write("\t\tP_UINT8 " + msg_uint8._name +";\n")
+        file_h.write("\tP_UINT8 " + msg_uint8._name +";\n")
     for msg_uint16 in _list_message_uint16:
-        file_h.write("\t\tP_UINT16 " + msg_uint16._name +";\n")
+        file_h.write("\tP_UINT16 " + msg_uint16._name +";\n")
     for msg_uint32 in _list_message_uint32:
-        file_h.write("\t\tP_UINT32 " + msg_uint32._name +";\n")
+        file_h.write("\tP_UINT32 " + msg_uint32._name +";\n")
     for msg_uint64 in _list_message_uint64:
-        file_h.write("\t\tP_UINT64 " + msg_uint64._name +";\n")
+        file_h.write("\tP_UINT64 " + msg_uint64._name +";\n")
     for msg_bool in _list_message_bool:
-        file_h.write("\t\tbool " + msg_bool._name +";\n")
+        file_h.write("\tbool " + msg_bool._name +";\n")
     for msg_float in _list_message_float:
-        file_h.write("\t\tfloat " + msg_float._name +";\n")
+        file_h.write("\tfloat " + msg_float._name +";\n")
     for msg_double in _list_message_double:
-        file_h.write("\t\tdouble " + msg_double._name +";\n")
+        file_h.write("\tdouble " + msg_double._name +";\n")
     for msg_enum in _list_message_enum:
-        file_h.write("\t\t" + msg_enum._type + " " + msg_enum._name +";\n")
+        file_h.write("\t" + msg_enum._type + " " + msg_enum._name +";\n")
     for msg_string in _list_message_string:
-        file_h.write("\t\tstd::string " + msg_string._name +";\n")
+        file_h.write("\tstd::string " + msg_string._name +";\n")
 
     file_h.write("}; // class " + class_name + "\n\n")
 
