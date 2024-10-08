@@ -164,19 +164,7 @@
 				}												\
 				void class_name::clear_##msg_name()				\
 				{												\
-					if(EQUAL(bool, T))							\
-					{											\
-						msg_name = false;						\
-					}											\
-					if(EQUAL(float, T))							\
-					{											\
-						msg_name = 0.0f;						\
-					}											\
-					if(EQUAL(double, T))						\
-					{											\
-						msg_name = 0.0;							\
-					}											\
-					msg_name = 0;								\
+					msg_name = (T)0;								\
 				}
 
 //.cc
