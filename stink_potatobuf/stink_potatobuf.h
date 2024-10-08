@@ -6,7 +6,7 @@
 
 
 #define ERROR_STR "The byte stream does not match this type of structure \n"
-#define EQUAL(TYPE1, TYPE2) std::string(#TYPE1) == std::string(#TYPE2)
+// #define EQUAL(TYPE1, TYPE2) std::string(#TYPE1) == std::string(#TYPE2)
 
 #define INIT_MSG_NUM(	num_int8,		\
 						num_int16,		\
@@ -36,7 +36,7 @@
 				_num[12] = num_string;		
 
 #define OVERALL_STR_LENGTH(...)		\
-				_over_all_length(_num[_num_string], __VA_ARGS__)
+				_over_all_length(_num[_num_string], ##__VA_ARGS__)
 				
 #define ADD_TO_STR(name)		\
 				char* _x_##name = (char*)&name;				\
@@ -194,19 +194,7 @@
 				}												\
 				void namespace_name::class_name::clear_##msg_name()				\
 				{												\
-					if(EQUAL(bool, T))							\
-					{											\
-						msg_name = false;						\
-					}											\
-					if(EQUAL(float, T))							\
-					{											\
-						msg_name = 0.0f;						\
-					}											\
-					if(EQUAL(double, T))						\
-					{											\
-						msg_name = 0.0;							\
-					}											\
-					msg_name = 0;								\
+					msg_name = (T)0;								\
 				}
 
 //.h
@@ -353,6 +341,11 @@ public:
 			delete[] _num;
 			_num = nullptr;
 		}
+	}
+
+	size_t buf_size_without_str()
+	{
+		return _sum();
 	}
 
 	virtual size_t SerializeToString(std::string&) = 0;
