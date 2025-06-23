@@ -17,7 +17,7 @@ element.name 表示枚举中元素的名称
 element.id 表示枚举中元素的值，第一个元素的值必须为 0 或不指定 id
 
 message 表示类中可序列化的成员变量
-message.type 表示成员变量的类型，可指定为 element.name
+message.type 表示成员变量的类型，可指定为 enum.name
 
 type 包含 ：
 	int8
