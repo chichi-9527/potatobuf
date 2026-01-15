@@ -2,28 +2,14 @@
 
 size_t package1::class1::SerializeToString(std::string& str)
 {
-	size_t str_len = OVERALL_STR_LENGTH(is_string.size());
-	str.resize(str_len);
+	size_t str_len = 0;
+	SerializeToCString(str_len);
+	str = std::string(_c_data, str_len);
 
-	ADD_TO_STR(id1);
-	ADD_TO_STR(id2);
-	ADD_TO_STR(id3);
-	ADD_TO_STR(id4);
-	ADD_TO_STR(id5);
-	ADD_TO_STR(id6);
-	ADD_TO_STR(id7);
-	ADD_TO_STR(id8);
-	ADD_TO_STR(is_bool);
-	ADD_TO_STR(is_float);
-	ADD_TO_STR(is_double);
-	ADD_TO_STR(is_enum);
-	STR_ADD_TO_STR(is_string);
-
-	_add_len = 0;
 	return str_len;
 }
 
-char* package1::class1::SerializeToCString(size_t& len)
+const char* package1::class1::SerializeToCString(size_t& len)
 {
 	len = OVERALL_STR_LENGTH(is_string.size());
 	_c_data = new char[len];
@@ -66,7 +52,7 @@ int package1::class1::SerializeFromString(std::string& str)
 	return 0;
 }
 
-int package1::class1::SerializeFromCString(char* c_str, size_t len)
+int package1::class1::SerializeFromCString(const char* c_str, size_t len)
 {
 	std::string str(c_str, len);
 	return SerializeFromString(str);
@@ -100,39 +86,14 @@ ADD_MSG_STRING_ACHIEVE_HAVE_NAMESPACE(is_string, class1, package1)
 
 size_t package1::class2::SerializeToString(std::string& str)
 {
-	size_t str_len = OVERALL_STR_LENGTH(is_string.size(), is_string1.size());
-	str.resize(str_len);
+	size_t str_len = 0;
+	SerializeToCString(str_len);
+	str = std::string(_c_data, str_len);
 
-	ADD_TO_STR(id1);
-	ADD_TO_STR(id11);
-	ADD_TO_STR(id2);
-	ADD_TO_STR(id12);
-	ADD_TO_STR(id3);
-	ADD_TO_STR(id13);
-	ADD_TO_STR(id4);
-	ADD_TO_STR(id14);
-	ADD_TO_STR(id5);
-	ADD_TO_STR(id15);
-	ADD_TO_STR(id6);
-	ADD_TO_STR(id16);
-	ADD_TO_STR(id7);
-	ADD_TO_STR(id17);
-	ADD_TO_STR(id8);
-	ADD_TO_STR(id18);
-	ADD_TO_STR(is_bool);
-	ADD_TO_STR(is_bool1);
-	ADD_TO_STR(is_float);
-	ADD_TO_STR(is_float1);
-	ADD_TO_STR(is_double);
-	ADD_TO_STR(is_double1);
-	STR_ADD_TO_STR(is_string);
-	STR_ADD_TO_STR(is_string1);
-
-	_add_len = 0;
 	return str_len;
 }
 
-char* package1::class2::SerializeToCString(size_t& len)
+const char* package1::class2::SerializeToCString(size_t& len)
 {
 	len = OVERALL_STR_LENGTH(is_string.size(), is_string1.size());
 	_c_data = new char[len];
@@ -197,7 +158,7 @@ int package1::class2::SerializeFromString(std::string& str)
 	return 0;
 }
 
-int package1::class2::SerializeFromCString(char* c_str, size_t len)
+int package1::class2::SerializeFromCString(const char* c_str, size_t len)
 {
 	std::string str(c_str, len);
 	return SerializeFromString(str);

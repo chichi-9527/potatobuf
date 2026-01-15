@@ -1,9 +1,9 @@
-#ifndef S_POTATOBUF
+﻿#ifndef S_POTATOBUF
 #define S_POTATOBUF
 
 #include <string>
 #include <cstdarg>
-
+#include <stdint.h>
 
 #define ERROR_STR "The byte stream does not match this type of structure \n"
 // #define EQUAL(TYPE1, TYPE2) std::string(#TYPE1) == std::string(#TYPE2)
@@ -38,89 +38,38 @@
 #define OVERALL_STR_LENGTH(...)		\
 				_over_all_length(_num[_num_string], ##__VA_ARGS__)
 				
-#define ADD_TO_STR(name)		\
-				char* _x_##name = (char*)&name;				\
-				for(size_t i = 0; i < sizeof(name); ++i){	\
-					str[_add_len + i] = _x_##name[i];}		\
-				_add_len += sizeof(name);
-
-#define  STR_ADD_TO_STR(name)		\
-				size_t name##_size = name.size();			\
-				ADD_TO_STR(name##_size)					\
-				for (size_t i = 0; i < name.size(); ++i)	\
-				{											\
-					str[_add_len + i] = name[i];			\
-				}											\
-				_add_len += name.size();				
 
 #define ADD_TO_CSTR(name)		\
-				char* _x_##name = (char*)&name;				\
-				for(size_t i = 0; i < sizeof(name); ++i){	\
-					_c_data[_add_len + i] = _x_##name[i];}	\
+				memcpy(_c_data + _add_len, (void*)&name, sizeof(name));	\
 				_add_len += sizeof(name);
 
-#define  STR_ADD_TO_CSTR(name)		\
-				size_t name##_size = name.size();			\
-				ADD_TO_CSTR(name##_size)					\
-				for (size_t i = 0; i < name.size(); ++i)	\
-				{											\
-					_c_data[_add_len + i] = name[i];		\
-				}											\
-				_add_len += name.size();				
+#define  STR_ADD_TO_CSTR(string_name)		\
+				P_UINT64 string_name##_size = (P_UINT64)string_name.size();			\
+				ADD_TO_CSTR(string_name##_size)								\
+				memcpy(_c_data + _add_len, (void*)string_name.data(), (size_t)string_name##_size);	\
+				_add_len += (size_t)string_name##_size;				
 
 #define POP_FROM_STR(name)		\
 				size_t need_size##name =_pop_len + sizeof(name);	\
 				if(need_size##name > str.size()){					\
 					_pop_len = 0;								\
-					_error = std::string(ERROR_STR);		\
+					_error = ERROR_STR;							\
 					return -1;}									\
-				char* _x_##name = (char*)&name;				\
-				for (size_t i = 0; i < sizeof(name); ++i)	\
-				{											\
-					_x_##name[i] = str[_pop_len + i];		\
-				}											\
+				memcpy(&name, (void*)(str.data() + _pop_len), sizeof(name));	\
 				_pop_len += sizeof(name);
 
-#define  STR_POP_FROM_STR(name)		\
-				size_t name##_size = 0;						\
-				POP_FROM_STR(name##_size)					\
-				size_t need_size##name =_pop_len + name##_size;	\
-				if(need_size##name > str.size()){					\
+#define  STR_POP_FROM_STR(string_name)		\
+				P_UINT64 string_name##_size = 0;						\
+				POP_FROM_STR(string_name##_size)					\
+				size_t need_size##string_name =_pop_len + (size_t)string_name##_size;	\
+				if(need_size##string_name > str.size()){					\
 					_pop_len = 0;								\
-					_error = std::string(ERROR_STR);		\
+					_error = ERROR_STR;		\
 					return -1;}									\
-				name.resize(name##_size);					\
-				for (size_t i = 0; i < name##_size; ++i)	\
-				{											\
-					name[i] = str[_pop_len + i];			\
-				}											\
-				_pop_len += name.size();				
+				string_name.resize((size_t)string_name##_size);					\
+				memcpy(&string_name[0], (void*)(str.data() + _pop_len), (size_t)string_name##_size);	\
+				_pop_len += (size_t)string_name##_size;				
 
-#define POP_FROM_CSTR(name)		\
-				size_t need_size##name =_pop_len + sizeof(name);	\
-				if(need_size##name > len){					\
-					_pop_len = 0;								\
-					_error = std::string(ERROR_STR);		\
-					return -1;}									\
-				char* _x_##name = (char*)&name;				\
-				for(size_t i = 0; i < sizeof(name); ++i){	\
-					_x_##name[i] = c_str[_add_len + i];}	\
-				_pop_len += sizeof(name);
-
-#define  STR_POP_FROM_CSTR(name)		\
-				size_t name##_size = 0;						\
-				POP_FROM_CSTR(name##_size)					\
-				size_t need_size##name =_pop_len + name##_size;	\
-				if(need_size##name > len){					\
-					_pop_len = 0;								\
-					_error = std::string(ERROR_STR);		\
-					return -1;}									\
-				name.resize(name##_size);					\
-				for (size_t i = 0; i < name##_size; ++i)	\
-				{											\
-					name[i] = c_str[_pop_len + i];			\
-				}											\
-				_pop_len += name.size();				
 
 #define IS_STR_ERR()		\
 				if (_pop_len < str.size())			\
@@ -245,10 +194,10 @@
 				{												\
 					msg_name = value;								\
 				}												\
-				void class_name::set_##msg_name(const char* value, size_t size)	\
+				void class_name::set_##msg_name(const char* value, unsigned long long size)	\
 				{												\
 					msg_name.resize(size);						\
-					for (size_t i = 0; i < size; ++i)			\
+					for (unsigned long long i = 0; i < size; ++i)			\
 					{											\
 						msg_name[i] = value[i];					\
 					}											\
@@ -275,11 +224,7 @@
 				}												\
 				void namespace_name::class_name::set_##msg_name(const char* value, size_t size)	\
 				{												\
-					msg_name.resize(size);						\
-					for (size_t i = 0; i < size; ++i)			\
-					{											\
-						msg_name[i] = value[i];					\
-					}											\
+					msg_name = std::string(value, size);		\
 				}												\
 				void namespace_name::class_name::clear_##msg_name()				\
 				{												\
@@ -289,14 +234,14 @@
 
 #define TYPE_SIZE 13
 
-typedef		char				P_INT8;
-typedef		short				P_INT16;
-typedef		int					P_INT32;
-typedef		long long			P_INT64;
-typedef		unsigned char		P_UINT8;
-typedef		unsigned short		P_UINT16;
-typedef		unsigned int		P_UINT32;
-typedef		unsigned long long	P_UINT64;
+typedef		int8_t				P_INT8;
+typedef		int16_t				P_INT16;
+typedef		int32_t				P_INT32;
+typedef		int64_t				P_INT64;
+typedef		uint8_t				P_UINT8;
+typedef		uint16_t			P_UINT16;
+typedef		uint32_t			P_UINT32;
+typedef		uint64_t 			P_UINT64;
 
 
 namespace PotatoBuffer
@@ -331,16 +276,16 @@ public:
 		}
 	}
 
-	size_t buf_size_without_str()
+	unsigned long long buf_size_without_str()
 	{
 		return _sum();
 	}
 
 	virtual size_t SerializeToString(std::string&) = 0;
-	//���ص�ָ�뽫�ڵ�������������ʧЧ
-	virtual char* SerializeToCString(size_t&) = 0;
+	//返回的指针将在调用析构函数后失效
+	virtual const char* SerializeToCString(size_t&) = 0;
 	virtual int SerializeFromString(std::string&) = 0;
-	virtual int SerializeFromCString(char*, size_t) = 0;
+	virtual int SerializeFromCString(const char*, size_t) = 0;
 
 	std::string& get_error()
 	{
@@ -385,15 +330,15 @@ protected:
 		sum += _num[_num_uint32] * sizeof(P_UINT32);
 		sum += _num[_num_uint64] * sizeof(P_UINT64);
 
-		sum += _num[_num_bool] * sizeof(bool);
+		sum += _num[_num_bool] * sizeof(P_INT8);
 		sum += _num[_num_float] * sizeof(float);
 		sum += _num[_num_double] * sizeof(double);
-		sum += _num[_num_enum] * sizeof(int);
+		sum += _num[_num_enum] * sizeof(P_INT64);
 
 		return sum;
 	}
 
-	size_t _over_all_length(int str_num, ...)
+	size_t _over_all_length(size_t str_num, ...)
 	{
 		size_t str_len = _sum();
 
@@ -404,10 +349,11 @@ protected:
 
 		va_list args;
 		va_start(args, str_num);
-		for (int i = 0; i < str_num; ++i)
+		for (size_t i = 0; i < str_num; ++i)
 		{
-			str_len += sizeof(size_t);
-			str_len += va_arg(args, int);
+			// 字符串长度标识无论 32 位还是 64 位系统均为 8 字节
+			str_len += sizeof(P_UINT64);
+			str_len += va_arg(args, size_t);
 		}
 		va_end(args);
 		return str_len;

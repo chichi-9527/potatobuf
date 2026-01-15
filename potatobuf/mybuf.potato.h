@@ -31,12 +31,12 @@ public:
 	~class1(){}
 
 	size_t SerializeToString(std::string& str) override;
-	char* SerializeToCString(size_t& len) override;
+	const char* SerializeToCString(size_t& len) override;
 	int SerializeFromString(std::string& str) override;
-	int SerializeFromCString(char* c_str, size_t len) override;
+	int SerializeFromCString(const char* c_str, size_t len) override;
 
 	//enum1
-	enum enum1 : int {
+	enum class enum1 : int {
 		ENUM_1 = 0,
 		ENUM_2 = 2,
 		ENUM_3
@@ -44,7 +44,7 @@ public:
 
 
 	//enum2
-	enum enum2 : int {
+	enum class enum2 : int {
 		ENUM_4 = 0,
 		ENUM_5 = 2,
 		ENUM_6
@@ -151,9 +151,9 @@ public:
 	~class2(){}
 
 	size_t SerializeToString(std::string& str) override;
-	char* SerializeToCString(size_t& len) override;
+	const char* SerializeToCString(size_t& len) override;
 	int SerializeFromString(std::string& str) override;
-	int SerializeFromCString(char* c_str, size_t len) override;
+	int SerializeFromCString(const char* c_str, size_t len) override;
 	//id1
 	//None
 	ADD_MSG(P_INT8 ,id1)
