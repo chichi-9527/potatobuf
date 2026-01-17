@@ -1,14 +1,25 @@
 ﻿
 #include "mybuf.h"
-#include "mybuf.potato.h"
+#include "potatobuf_c/test/mybuf.potato.h"
+
+#define INVENT_ITEXT_USE_WSTRING
+#include "IneventText/IText.h"
 
 #include <iostream>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 int main()
 {
+#ifdef _WIN32
+	SetConsoleOutputCP(CP_UTF8);
+#endif
+
 	package1::class2* a = new package1::class2();
 	a->set_id1(1);
-	a->set_is_string("wodetian我的天");
+	a->set_is_string(u8"wodetian我的天");
 	a->set_id2(2);
 	a->set_id3(3);
 	a->set_id4(4);
@@ -50,6 +61,23 @@ int main()
 	std::cout << b->get_is_float() << "\n";
 	std::cout << b->get_is_double() << "\n";
 	std::cout << b->get_is_string() << "\n";
+
+
+	/////////////////////////////////////////////////
+
+	std::string str(u8"1234567,qbcdefg,我的天，是中文！");
+	std::wstring wstr(L"1234567,qbcdefg,我的天，是中文！");
+	std::cout << str << "\n";
+	INVENT::IText text(wstr);
+	INVENT::IText text2 = std::move(text);
+
+	std::string utf8_str;
+	text.ToUtf8(utf8_str);
+
+	std::cout << utf8_str << "\n";
+	text2.ToUtf8(utf8_str);
+
+	std::cout << utf8_str << "\n";
 
 
 	return 0;

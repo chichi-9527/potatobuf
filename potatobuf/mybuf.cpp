@@ -33,7 +33,7 @@ const char* package2::class1::SerializeToCString(size_t& len)
 	return _c_data;
 }
 
-int package2::class1::SerializeFromString(std::string& str)
+int package2::class1::SerializeFromString(const std::string& str)
 {
 	POP_FROM_STR(id1);
 	POP_FROM_STR(id2);

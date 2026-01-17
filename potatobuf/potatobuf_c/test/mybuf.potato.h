@@ -31,12 +31,12 @@ public:
 	~class1(){}
 
 	size_t SerializeToString(std::string& str) override;
-	char* SerializeToCString(size_t& len) override;
-	int SerializeFromString(std::string& str) override;
-	int SerializeFromCString(char* c_str, size_t len) override;
+	const char* SerializeToCString(size_t& len) override;
+	int SerializeFromString(const std::string& str) override;
+	int SerializeFromCString(const char* c_str, size_t len) override;
 
 	//enum1
-	enum enum1 : int {
+	enum class enum1 : P_INT64 {
 		ENUM_1 = 0,
 		ENUM_2 = 2,
 		ENUM_3
@@ -44,7 +44,7 @@ public:
 
 
 	//enum2
-	enum enum2 : int {
+	enum class enum2 : P_INT64 {
 		ENUM_4 = 0,
 		ENUM_5 = 2,
 		ENUM_6
@@ -102,20 +102,20 @@ public:
 	//None
 	ADD_MSG_STRING(is_string)
 
-	private:
-		P_INT8 id1;
-		P_INT16 id2;
-		P_INT32 id3;
-		P_INT64 id4;
-		P_UINT8 id5;
-		P_UINT16 id6;
-		P_UINT32 id7;
-		P_UINT64 id8;
-		bool is_bool;
-		float is_float;
-		double is_double;
-		enum1 is_enum;
-		std::string is_string;
+private:
+	P_INT8 id1;
+	P_INT16 id2;
+	P_INT32 id3;
+	P_INT64 id4;
+	P_UINT8 id5;
+	P_UINT16 id6;
+	P_UINT32 id7;
+	P_UINT64 id8;
+	bool is_bool;
+	float is_float;
+	double is_double;
+	enum1 is_enum;
+	std::string is_string;
 }; // class class1
 
 class class2 final : public PotatoBuffer::_potatobuf
@@ -151,9 +151,9 @@ public:
 	~class2(){}
 
 	size_t SerializeToString(std::string& str) override;
-	char* SerializeToCString(size_t& len) override;
-	int SerializeFromString(std::string& str) override;
-	int SerializeFromCString(char* c_str, size_t len) override;
+	const char* SerializeToCString(size_t& len) override;
+	int SerializeFromString(const std::string& str) override;
+	int SerializeFromCString(const char* c_str, size_t len) override;
 	//id1
 	//None
 	ADD_MSG(P_INT8 ,id1)
@@ -250,31 +250,31 @@ public:
 	//None
 	ADD_MSG_STRING(is_string1)
 
-	private:
-		P_INT8 id1;
-		P_INT8 id11;
-		P_INT16 id2;
-		P_INT16 id12;
-		P_INT32 id3;
-		P_INT32 id13;
-		P_INT64 id4;
-		P_INT64 id14;
-		P_UINT8 id5;
-		P_UINT8 id15;
-		P_UINT16 id6;
-		P_UINT16 id16;
-		P_UINT32 id7;
-		P_UINT32 id17;
-		P_UINT64 id8;
-		P_UINT64 id18;
-		bool is_bool;
-		bool is_bool1;
-		float is_float;
-		float is_float1;
-		double is_double;
-		double is_double1;
-		std::string is_string;
-		std::string is_string1;
+private:
+	P_INT8 id1;
+	P_INT8 id11;
+	P_INT16 id2;
+	P_INT16 id12;
+	P_INT32 id3;
+	P_INT32 id13;
+	P_INT64 id4;
+	P_INT64 id14;
+	P_UINT8 id5;
+	P_UINT8 id15;
+	P_UINT16 id6;
+	P_UINT16 id16;
+	P_UINT32 id7;
+	P_UINT32 id17;
+	P_UINT64 id8;
+	P_UINT64 id18;
+	bool is_bool;
+	bool is_bool1;
+	float is_float;
+	float is_float1;
+	double is_double;
+	double is_double1;
+	std::string is_string;
+	std::string is_string1;
 }; // class class2
 
 } // namespace package1

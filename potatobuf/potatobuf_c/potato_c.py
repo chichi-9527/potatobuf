@@ -289,13 +289,13 @@ def _generate_potatobuf_cpp( file_h, file_cc , class_name : str) -> int:
     
     file_h.write("\t~" + class_name + "(){}\n\n")
     file_h.write("\tsize_t SerializeToString(std::string& str) override;\n")
-    file_h.write("\tchar* SerializeToCString(size_t& len) override;\n")
-    file_h.write("\tint SerializeFromString(std::string& str) override;\n")
-    file_h.write("\tint SerializeFromCString(char* c_str, size_t len) override;\n")
+    file_h.write("\tconst char* SerializeToCString(size_t& len) override;\n")
+    file_h.write("\tint SerializeFromString(const std::string& str) override;\n")
+    file_h.write("\tint SerializeFromCString(const char* c_str, size_t len) override;\n")
 
     for t_enum in _list_enum:
         file_h.write("\n\t//" + t_enum._name + "\n")
-        file_h.write("\tenum class " + t_enum._name + " : int {\n")
+        file_h.write("\tenum class " + t_enum._name + " : P_INT64 {\n")
         # print(len(t_enum._element))
         for t_element in t_enum._element :
             id = t_element._id
@@ -388,47 +388,13 @@ def _generate_potatobuf_cpp( file_h, file_cc , class_name : str) -> int:
 
     # SerializeToString
     file_cc.write("size_t " + t_namespace + class_name + "::SerializeToString(std::string& str)\n{\n")
-    file_cc.write("\tsize_t str_len = OVERALL_STR_LENGTH(")
-    for msg_string in _list_message_string:
-        if is_frist:
-            file_cc.write(msg_string._name + ".size()")
-            is_frist = False
-        else :
-            file_cc.write(", " + msg_string._name + ".size()")
-    is_frist = True
-    file_cc.write(");\n\tstr.resize(str_len);\n\n")
-
-    for msg_int8 in _list_message_int8:
-        file_cc.write("\tADD_TO_STR(" + msg_int8._name +");\n")
-    for msg_int16 in _list_message_int16:
-        file_cc.write("\tADD_TO_STR(" + msg_int16._name +");\n")
-    for msg_int32 in _list_message_int32:
-        file_cc.write("\tADD_TO_STR(" + msg_int32._name +");\n")
-    for msg_int64 in _list_message_int64:
-        file_cc.write("\tADD_TO_STR(" + msg_int64._name +");\n")
-    for msg_uint8 in _list_message_uint8:
-        file_cc.write("\tADD_TO_STR(" + msg_uint8._name +");\n")
-    for msg_uint16 in _list_message_uint16:
-        file_cc.write("\tADD_TO_STR(" + msg_uint16._name +");\n")
-    for msg_uint32 in _list_message_uint32:
-        file_cc.write("\tADD_TO_STR(" + msg_uint32._name +");\n")
-    for msg_uint64 in _list_message_uint64:
-        file_cc.write("\tADD_TO_STR(" + msg_uint64._name +");\n")
-    for msg_bool in _list_message_bool:
-        file_cc.write("\tADD_TO_STR(" + msg_bool._name +");\n")
-    for msg_float in _list_message_float:
-        file_cc.write("\tADD_TO_STR(" + msg_float._name +");\n")
-    for msg_double in _list_message_double:
-        file_cc.write("\tADD_TO_STR(" + msg_double._name +");\n")
-    for msg_enum in _list_message_enum:
-        file_cc.write("\tADD_TO_STR(" + msg_enum._name +");\n")
-    for msg_string in _list_message_string:
-        file_cc.write("\tSTR_ADD_TO_STR(" + msg_string._name +");\n")
-
-    file_cc.write("\n\t_add_len = 0;\n\treturn str_len;\n}\n\n")
+    file_cc.write("\tsize_t str_len = 0;\n")
+    file_cc.write("\tSerializeToCString(str_len);\n")
+    file_cc.write("\tstr = std::string(_c_data, str_len);\n\n")
+    file_cc.write("\treturn str_len;\n}\n\n")
 
     # SerializeToCString
-    file_cc.write("char* " + t_namespace + class_name + "::SerializeToCString(size_t& len)\n{\n")
+    file_cc.write("const char* " + t_namespace + class_name + "::SerializeToCString(size_t& len)\n{\n")
     file_cc.write("\tlen = OVERALL_STR_LENGTH(")
     for msg_string in _list_message_string:
         if is_frist:
@@ -469,7 +435,7 @@ def _generate_potatobuf_cpp( file_h, file_cc , class_name : str) -> int:
     file_cc.write("\n\t_add_len = 0;\n\treturn _c_data;\n}\n\n")
 
     # SerializeFromString
-    file_cc.write("int " + t_namespace + class_name + "::SerializeFromString(std::string& str)\n{\n")
+    file_cc.write("int " + t_namespace + class_name + "::SerializeFromString(const std::string& str)\n{\n")
 
     for msg_int8 in _list_message_int8:
         file_cc.write("\tPOP_FROM_STR(" + msg_int8._name +");\n")
@@ -501,7 +467,7 @@ def _generate_potatobuf_cpp( file_h, file_cc , class_name : str) -> int:
     file_cc.write("\n\tIS_STR_ERR();\n\treturn 0;\n}\n\n")
 
     # SerializeFromCString
-    file_cc.write("int " + t_namespace + class_name + "::SerializeFromCString(char* c_str, size_t len)\n{\n")
+    file_cc.write("int " + t_namespace + class_name + "::SerializeFromCString(const char* c_str, size_t len)\n{\n")
     file_cc.write("\tstd::string str(c_str, len);\n\treturn SerializeFromString(str);\n}\n\n")
 
     # achieve msg variable

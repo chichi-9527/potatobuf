@@ -284,7 +284,7 @@ public:
 	virtual size_t SerializeToString(std::string&) = 0;
 	//返回的指针将在调用析构函数后失效
 	virtual const char* SerializeToCString(size_t&) = 0;
-	virtual int SerializeFromString(std::string&) = 0;
+	virtual int SerializeFromString(const std::string&) = 0;
 	virtual int SerializeFromCString(const char*, size_t) = 0;
 
 	std::string& get_error()

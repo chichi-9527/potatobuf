@@ -40,7 +40,7 @@ public:
 
 	size_t SerializeToString(std::string& str) override;
 	const char* SerializeToCString(size_t& len) override;
-	int SerializeFromString(std::string& str) override;
+	int SerializeFromString(const std::string& str) override;
 	int SerializeFromCString(const char* c_str, size_t len) override;
 
 	//enum1
